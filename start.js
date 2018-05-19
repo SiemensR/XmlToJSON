@@ -8,17 +8,13 @@ var step2 = false;
 var step3 = false;
 
 function First() {
-if (!fs.existsSync('./dist/sitemap.xml')) {
   // Here starts the save of xml to json
-  download('https://www.thrombosisadviser.com/sitemap.xml', 'dist').then(() => {
+  download('https://www.nebido.com/sitemap.xml', 'dist').then(() => {
     console.log('Sitemap successfully downloaded!');
   });
-step2 = true;
-};
 };
 
 function Second() {
-if (step2 == true) {
   // xml will be saved in the folder dist
   var sInputFile = "./dist/sitemap.xml"
   //starting of xml to json parser
@@ -31,14 +27,13 @@ if (step2 == true) {
     fs.writeFile('./dist/urlList.json',s, function (err) {
       if (err)
       return console.log(err);
-      console.log('\n Successfully wrote file urlList.json!');
+      console.log('\nSuccessfully wrote file urlList.json!');
     });
   });
   // end xml to json
-} else {
-  console.log("could not load sitemap or it already exists");
 };
-};
+
+
 
 function Third() {
   fs.readFile('./dist/urlList.json', 'utf8', function (err, data) {
@@ -46,7 +41,60 @@ function Third() {
     var obj = JSON.parse(data);
 
     //const fs = require('file-system');
-
+    const cookie1 = {
+      name: 'CC_HCP_Usertype',
+      value: 'HCP',
+      domain: 'www.nebido.com',
+      // url: '',
+      path: '/',
+      httpOnly: false,
+      secure: false
+    }
+    const cookie2 = {
+      name: 'nebido_com',
+      value: 'R3NBSE3sIPx9vskF8h5wi0',
+      domain: 'www.nebido.com',
+      // url: '',
+      path: '/',
+      httpOnly: true,
+      secure: false
+    }
+    const cookie3 = {
+      name: 'WHGCOOKIECONSENT',
+      value: 'YTozOntzOjM6Imd0bSI7YjoxO3M6Mjoid3QiO2I6MTtzOjU6InNldEF0IjtpOjE1MjY3NTg4NTQ7fQ==:"anZzOXphZDBiek90NzVkWVdjUU1jMHlKaDJJS29lV3hBZXgwZkJRaDB1QVlQTmViaWRvQ29tQ1BpWVZUWFRPVnJZNURJcU9VQWtDUGlZVlRYVE9Wclk1RElxT1VBa2E6Mzp7czozOiJndG0iO2I6MTtzOjI6Ind0IjtiOjE7czo1OiJzZXRBdCI7aToxNTI2NzU4ODU0O30="',
+      domain: '.www.nebido.com',
+      // url: '',
+      path: '/',
+      httpOnly: false,
+      secure: false
+    }
+    const cookie4 = {
+      name: '_ga',
+      value: 'GA1.2.755296856.1526758334',
+      domain: 'www.nebido.com',
+      // url: '',
+      path: '/',
+      httpOnly: false,
+      secure: false
+    }
+    const cookie5 = {
+      name: '_gid',
+      value: 'GA1.2.755296856.1526758334',
+      domain: 'www.nebido.com',
+      // url: '',
+      path: '/',
+      httpOnly: false,
+      secure: false
+    }
+    const cookie6 = {
+      name: '_gat_UA-84741036-17',
+      value: '1',
+      domain: 'www.nebido.com',
+      // url: '',
+      path: '/',
+      httpOnly: false,
+      secure: false
+    }
     const devices = [
       { name: 'Small-Desktop-1', width: 1280, height: 800 },
     ];
@@ -61,15 +109,22 @@ function Third() {
         async function setViewports(device, url) {
           const browser = await puppeteer.launch();
           const page = await browser.newPage();
-          await page.waitFor(300);
+          await page.setCookie(cookie1);
+          await page.setCookie(cookie2);
+          await page.setCookie(cookie3);
+          await page.setCookie(cookie4);
+          await page.setCookie(cookie5);
+          await page.setCookie(cookie6);
+          await page.waitFor(3000);
           await page.goto(url.link);
-    //      await page.click(a,left); //click nicht fertig! sollte aber theoretisch funktionieren
-
           // Setting-up viewports
           await page.setViewport({
             width : device.width,
             height: device.height
           });
+    //      await this.page.waitFor(2000);
+    //      await this.page.click('#cookie-bar .button-wrapper .cc-btn');
+    //      await page.waitFor(300);
           await getScreenshots(device, url, page, browser);
         }
 
@@ -99,8 +154,7 @@ function Third() {
         getUrlAndResolutions(devices, urls);
       }
     });
-  };
-
+};
 
 First();
 setTimeout(Second, 1000);
