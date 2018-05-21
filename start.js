@@ -1,4 +1,3 @@
-
 const download = require('download');
 const x2j = require('xml2js');
 const puppeteer = require('puppeteer');
@@ -6,12 +5,6 @@ var fs = require('fs');
 
 var step2 = false;
 var step3 = false;
-var obj = "";
-
-fs.readFile('./dist/urlList.json', 'utf8', function (err, data) {
-  if (err) throw err; // we'll not consider error handling for now
-    obj = JSON.parse(data);
- });
 
 function First() {
   // Here starts the save of xml to json
@@ -30,11 +23,6 @@ function Second() {
     var s = JSON.stringify( result, undefined, 3 );
   // console.log( "Result" + "\n", s, "\n" ); --> uncommit it, if you wanna see the result in console
   // create new json file with all contents from xml
-    fs.writeFile('./dist/urlList.json',s, function (err) {
-      if (err)
-      return console.log(err);
-      console.log('\nSuccessfully wrote file urlList.json!');
-    });
   });
   // end xml to json
 };
@@ -45,8 +33,8 @@ function Third(count) {
     fs.readFile('./dist/urlList.json', 'utf8', function (err, data) {
       if (err) throw err; // we'll not consider error handling for now
        var obj = JSON.parse(data);
+       console.log("Working...");
 
-      //const fs = require('file-system');
       const cookie1 = {
         name: 'CC_HCP_Usertype',
         value: 'HCP',
@@ -160,9 +148,18 @@ function Third(count) {
   },3000);
   };
 
+function Fourth() {
+  fs.readFile('./dist/urlList.json', 'utf8', function (err, data) {
+    if (err) throw err; // we'll not consider error handling for now
+     var as = JSON.parse(data);
+     var number = as.urlset['url'].length;
+     // for (var s = 0; s < number; s++) {
+       for (var s = 0; s < 2; s++) {
+      setTimeout(Third,s*3000,s);
+     };
+   });
+};
 
 First();
 setTimeout(Second, 1000);
-for (var s = 0; s < 2; s++) {
-setTimeout(Third,s*3000,s);
-};
+Fourth();
